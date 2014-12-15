@@ -6,28 +6,22 @@ var declare = require('gulp-declare');
 var concat = require('gulp-concat');
 
 var basefile = "./www";
-var sass_dir = basefile + "/sass";
-var markup_dir =  basefile + "/templates";
+var sass_files = basefile + "/sass/**/*.{sass,scss}";
+var template_files = basefile + '/templates/**/*.hbs';
 
 var build_dir = "./build";
 var css_dir = build_dir + "/css";
 var js_dir = build_dir + "/js";
 
 
-
-gulp.task('default', function() {
-  // place code for your default task here
-});
-
-
-gulp.task('sass', function () {
-  gulp.src(sass_dir + "/**/*.{sass,scss}")
+gulp.task('styles', function () {
+  gulp.src(sass_files)
   .pipe(sass())
   .pipe(gulp.dest(css_dir));
 });
 
-gulp.task('markup', function(){
-  gulp.src(markup_dir + '/**/*.hbs')
+gulp.task('templates', function(){
+  gulp.src(template_files)
   .pipe(handlebars())
   .pipe(wrap('Handlebars.template(<%= contents %>)'))
   .pipe(declare({
@@ -37,3 +31,11 @@ gulp.task('markup', function(){
   .pipe(concat('templates.js'))
   .pipe(gulp.dest(js_dir));
 });
+
+
+gulp.task('watch', function() {
+  gulp.watch( sass_files, ["styles"]);
+  gulp.watch( template_files, ["templates"]);
+});
+
+gulp.task('default', ['styles', 'templates', 'watch']);
