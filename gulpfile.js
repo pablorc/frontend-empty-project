@@ -4,6 +4,7 @@ var handlebars = require('gulp-handlebars');
 var wrap = require('gulp-wrap');
 var declare = require('gulp-declare');
 var concat = require('gulp-concat');
+var scsslint = require('gulp-scss-lint');
 
 var basefile = "./www";
 var sass_files = basefile + "/sass/**/*.{sass,scss}";
@@ -38,4 +39,14 @@ gulp.task('watch', function() {
   gulp.watch( template_files, ["templates"]);
 });
 
+gulp.task('scss-lint', function() {
+  gulp.src(sass_files)
+  .pipe(scsslint({
+    'config': '.scss-lint.yml'
+  }));
+});
+
 gulp.task('default', ['styles', 'templates', 'watch']);
+
+
+ 
